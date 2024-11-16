@@ -2,7 +2,7 @@ import express from "express";
 import connectDB from "./config/db.js";
 import cors from "cors";
 import { PORT } from './config/serverConfig.js';
-
+import userRoute from "./routes/userRoutes.js"
 const app = express();
 
 
@@ -17,6 +17,9 @@ app.use(express.json());
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
+
+
+app.use("/api/user",userRoute);
 
 app.listen(PORT, async () => {
     try {

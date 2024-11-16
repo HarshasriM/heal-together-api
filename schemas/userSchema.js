@@ -1,5 +1,8 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+dotenv.config();
 
 // Define the user schema
 const userSchema = new mongoose.Schema({
@@ -37,22 +40,36 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    roles: {
-        isAdmin: { type: Boolean, default: false },
-        isUser: { type: Boolean, default: false },
+    role: {
+        type: String,
+        enum: ['user', 'admin'],
+        default: 'user'
     },
     donations: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Donation' }],
     campaigns: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Campaign' }],
 }, { timestamps: true });
 
 // Hash the password before saving
-userSchema.pre('save', async function (next) {
-    if (!this.isModified('password')) return next(); // Only hash the password if it's modified
 
-    const salt = await bcrypt.genSalt(10); // Generate a salt
-    this.password = await bcrypt.hash(this.password, salt); // Hash the password
+userSchema.pre('save', function(next) {
+    const user = this;
+    if (!user.isModified('password')) return next();
+    const SALT=bcrypt.genSaltSync(9);
+    const encryptedPassword = bcrypt.hashSync(user.password, SALT);
+    user.password = encryptedPassword;
     next();
 });
+
+userSchema.methods.comparePassword = function compare(password) {
+    return bcrypt.compareSync(password, this.password);
+}
+
+userSchema.methods.genJWT = function generate(){
+    return jwt.sign({ _id: this._id, username:this.username,email: this.email, role: this.role },process.env.JWT_WEB_TOKEN, {
+        expiresIn: '1d'
+    });
+}
+
 
 
 
