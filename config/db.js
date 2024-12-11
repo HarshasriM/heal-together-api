@@ -1,5 +1,5 @@
 import { connect } from "mongoose";
-const MONGODB_URI="mongodb://localhost:27017/healtogether"
+const MONGODB_URI="mongodb://127.0.0.1:27017/healtogether"
 const connectDB = async () => {
   try {
     await connect(MONGODB_URI);
