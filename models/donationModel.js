@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import donationSchema from "../schemas/donationSchema";
+import donationSchema from "../schemas/donationSchema.js";
 
 const Donation = mongoose.model("Donation",donationSchema)
 
-module.exports = Donation;
+export default Donation;

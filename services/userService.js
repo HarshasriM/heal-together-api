@@ -17,6 +17,21 @@ class UserService {
         const token = newUser.genJWT();
         return { user: userData , token };
     }
+    async signIn(userData) {
+        try {
+          const user = await userRepository.findUserByEmail(userData.email);
+          if (!user) {
+            throw { message: "No user found" };
+          }
+          if (!user.comparePassword(userData.password)) {
+            throw { message: "Wrong password" };
+          }
+          const token = user.genJWT();
+          return {token,user};
+        } catch (error) {
+          throw error;
+        }
+      }
 }
 
 export default new UserService();

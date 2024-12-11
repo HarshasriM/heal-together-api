@@ -9,14 +9,14 @@ console.log(JWT_WEB_TOKEN);
 class UserController {
     async signUp(req, res) {
         try {
-            const { email, password, firstName, lastName, phone, country, city,username } = req.body;
+            const { email, password, firstName, lastName, phone, country, city, username } = req.body;
 
             if (!email || !password || !firstName || !lastName || !phone || !country || !city || !username) {
                 return res.status(400).json({ message: 'All fields  are required' });
             }
 
             const user = await userService.signUp({
-                username:req.body.username,
+                username: req.body.username,
                 email: req.body.email,
                 password: req.body.password,
                 firstName: req.body.firstName,
@@ -41,6 +41,32 @@ class UserController {
             });
         }
     }
+    async signIn(req,res) {
+        try {
+            const { email, password, username } = req.body;
+            if (!email || !password || !username) {
+                return res.status(400).json({ message: 'All fields  are required' });
+            }
+            const { token, user } = await userService.signIn(req.body);
+            return res.status(200).json({
+                success: true,
+                data: {
+                    token,
+                    user,
+                },
+                message: "Successfully logged in",
+                err: {},
+            });
+        } catch (error) {
+            const statusCode = error.statusCode || 500;
+            return res.status(statusCode).json({
+                success: false,
+                data: {},
+                message: error.message,
+                err: error.name,
+            });
+        }
+    };
 
 }
 export default new UserController();
