@@ -21,6 +21,10 @@ const donationSchema = new mongoose.Schema({
         type: String,
         required: function () { return this.type === 'card'; },
       },
+      cvv: {
+        type: String,
+        required: function () { return this.type === 'card'; },
+      },
       expiryDate: {
         type: String,
         required: function () { return this.type === 'card'; },
@@ -32,9 +36,14 @@ const donationSchema = new mongoose.Schema({
         required: function () { return this.type === 'upi'; },
       },
     },
-    donorDetails: {
+    donarId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
+      required: true,
+    },
+    campaignId:{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Campaign',
       required: true,
     },
     transactionId: {
