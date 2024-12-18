@@ -1,4 +1,5 @@
 import Donation from "../models/donationModel.js";
+import User from "../models/userModel.js"
 import mongoose from "mongoose";
 
 class DonationRepository {
@@ -10,17 +11,34 @@ class DonationRepository {
             if (!mongoose.Types.ObjectId.isValid(data.campaignId)) {
                 throw new Error('Invalid campaignId format');
             }
+           
             const donation = new Donation(data);
-            return await donation.save();
+            const savedDonation = await donation.save();
+
+            // Update the donor's donations array
+            const updatedDonor = await User.findByIdAndUpdate(
+                data.donarId,
+                { $push: { donations: savedDonation._id } },
+                { new: true } // Return the updated document
+            );
+
+            if (!updatedDonor) {
+                throw new Error("Failed to update the donor's donations array. Donor not found.");
+            }
+
+            return savedDonation;
         }
         catch (error) {
-            throw new Error("Failed to create a donation");
+            console.error("Error in createDonation:", error.message);
+
+            // Throw a user-friendly error
+            throw new Error(`Failed to create a donation: ${error.message}`);
         }
 
     }
     async getAllDonations() {
         try {
-            const donations = await Donation.find().populate('donarId');
+            const donations = await Donation.find().populate('donarId',"username email");
             return donations;
         }
         catch (error) {

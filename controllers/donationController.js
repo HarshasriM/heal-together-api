@@ -19,6 +19,9 @@ class DonationController {
             }
             if (type === "card") {
                 const { cardNumber, cardHolderName, cvv, expiryDate } = req.body;
+                if (!cardNumber || !cardHolderName || !cvv || !expiryDate) {
+                    return res.status(400).json({ message: 'card fields  are required' });
+                }
                 const cardDetails = {
                     cardNumber: cardNumber,
                     cardHolderName: cardHolderName,
@@ -27,19 +30,17 @@ class DonationController {
                 }
                 tempdonation.cardDetails = cardDetails;
                 console.log(tempdonation)
-                if (!cardNumber || !cardHolderName || !cvv || !expiryDate) {
-                    return res.status(400).json({ message: 'card fields  are required' });
-                }
             }
             else {
                 const { upiId } = req.body;
+                if (!upiId) {
+                    return res.status(400).json({ message: "Upi Id is required" })
+                }
                 const upiDetails = {
                     upiId: upiId,
                 }
                 tempdonation.upiDetails = upiDetails;
-                if (!upiId) {
-                    return res.status(400).json({ message: "Upi Id is required" })
-                }
+                
             }
             const donation = await donationService.createDonation(tempdonation);
             return res.status(201).json({

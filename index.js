@@ -3,7 +3,8 @@ import connectDB from "./config/db.js";
 import cors from "cors";
 import { PORT } from './config/serverConfig.js';
 import userRoute from "./routes/userRoutes.js";
-import donationRoute from "./routes/donationRoutes.js"
+import donationRoute from "./routes/donationRoutes.js";
+import campaignRoute from "./routes/campaignRoutes.js";
 const app = express();
 
 
@@ -22,6 +23,7 @@ app.get('/', (req, res) => {
 
 app.use("/api/user",userRoute);
 app.use("/api/donations",donationRoute);
+app.use("/api/campaigns",campaignRoute);
 
 app.listen(PORT, async () => {
     try {

@@ -63,7 +63,7 @@ class UserController {
                 success: false,
                 data: {},
                 message: error.message,
-                err: error.name,
+                err: error.message,
             });
         }
     };

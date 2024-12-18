@@ -1,6 +1,6 @@
 
 import mongoose from 'mongoose';
-import campaignSchema from '../schemas/campaignSchema';
+import campaignSchema from '../schemas/campaignSchema.js';
 
 const Campaign = mongoose.model("Campaign", campaignSchema);
 

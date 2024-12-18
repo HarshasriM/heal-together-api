@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const campaignSchema = new mongoose.Schema({
     campaignTitle: { type: String, required: true },
@@ -7,6 +7,7 @@ const campaignSchema = new mongoose.Schema({
     collectedAmount: { type: Number, default:0 },
     campaignDescription: { type: String, required: true },
     deadline: { type: Date, required: true },
+    approved : {type:Boolean , required:true,default:false},
     campaignerDetails: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User', // Reference to the 'User' collection
