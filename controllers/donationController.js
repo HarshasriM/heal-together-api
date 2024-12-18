@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 class DonationController {
     async createDonation(req, res) {
         try {
-            const { amount, type,campaignId,donarId,transactionId } = req.body;
+            const {amount, type,campaignId,donarId,transactionId} = req.body;
             if (!mongoose.Types.ObjectId.isValid(donarId) || !mongoose.Types.ObjectId.isValid(campaignId)) {
                 throw new Error("Invalid donorId or campaignId");
             }
