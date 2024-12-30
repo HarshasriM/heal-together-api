@@ -48,7 +48,7 @@ class CampaignRepository {
         }
       }
       const sortOrderValue = sortOrder === "desc" ? -1 : 1;
-      return await Campaign.find(query).sort({[sortField]:sortOrderValue})
+      return await Campaign.find(query).sort({[sortField]:sortOrderValue}).populate("campaignerDetails")
 
     }
     catch(error){

@@ -29,7 +29,7 @@ class DonationController {
                     expiryDate: expiryDate
                 }
                 tempdonation.cardDetails = cardDetails;
-                console.log(tempdonation)
+                //console.log(tempdonation)
             }
             else {
                 const { upiId } = req.body;

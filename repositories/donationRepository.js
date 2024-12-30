@@ -1,5 +1,6 @@
 import Donation from "../models/donationModel.js";
 import User from "../models/userModel.js"
+import Campaign from "../models/campaignModel.js";
 import mongoose from "mongoose";
 
 class DonationRepository {
@@ -21,7 +22,10 @@ class DonationRepository {
                 { $push: { donations: savedDonation._id } },
                 { new: true } // Return the updated document
             );
-
+            const updateCampaign = await Campaign.findByIdAndUpdate(data.campaignId,{$inc:{collectedAmount : data.amount}},{new:true});
+            if(!updateCampaign){
+                throw new Error("Failed to update campaign")
+            }
             if (!updatedDonor) {
                 throw new Error("Failed to update the donor's donations array. Donor not found.");
             }
